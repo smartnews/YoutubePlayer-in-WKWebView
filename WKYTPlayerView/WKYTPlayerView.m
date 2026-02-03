@@ -1132,6 +1132,12 @@ NSString static *const kWKYTPlayerSyndicationRegexPattern = @"^https://tpc.googl
         NSString* spmBundlePath = [NSString stringWithFormat:@"YoutubePlayer-in-WKWebView_YoutubePlayer-in-WKWebView.bundle/%@", bundleName];
         NSString* frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:spmBundlePath];
         frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
+        if (!frameworkBundle) {
+            // Fallback to Tuist generated bundle file name
+            NSString* spmBundlePathForTuist = [NSString stringWithFormat:@"YoutubePlayer-in-WKWebView_YoutubePlayer_in_WKWebView.bundle/%@", bundleName];
+            NSString* frameworkBundlePathForTuist = [mainBundlePath stringByAppendingPathComponent:spmBundlePathForTuist];
+            frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePathForTuist];
+        }
         #else
         NSString* frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:bundleName];
         frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
