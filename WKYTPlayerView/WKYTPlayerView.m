@@ -1129,9 +1129,19 @@ NSString static *const kWKYTPlayerSyndicationRegexPattern = @"^https://tpc.googl
         NSString* bundleName = @"WKYTPlayerView.bundle";
         NSString* mainBundlePath = [[NSBundle bundleForClass:[WKYTPlayerView class]] resourcePath];
         #ifdef SPM_BUNDLE
-        NSString* spmBundlePath = [NSString stringWithFormat:@"YoutubePlayer-in-WKWebView_YoutubePlayer-in-WKWebView.bundle/%@", bundleName];
-        NSString* frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:spmBundlePath];
-        frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
+        // Resource bundle names used by SwiftPM, Tuist 4.64.2 and Tuist 4.209.0.
+        NSArray<NSString*>* resourceBundleNames = @[
+            @"YoutubePlayer-in-WKWebView_YoutubePlayer-in-WKWebView.bundle",
+            @"YoutubePlayer-in-WKWebView_YoutubePlayer_in_WKWebView.bundle",
+            @"YoutubePlayer_in_WKWebView_YoutubePlayer_in_WKWebView.bundle",
+        ];
+        for (NSString* resourceBundleName in resourceBundleNames) {
+            NSString* frameworkBundlePath = [[mainBundlePath stringByAppendingPathComponent:resourceBundleName] stringByAppendingPathComponent:bundleName];
+            frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
+            if (frameworkBundle) {
+                break;
+            }
+        }
         #else
         NSString* frameworkBundlePath = [mainBundlePath stringByAppendingPathComponent:bundleName];
         frameworkBundle = [NSBundle bundleWithPath:frameworkBundlePath];
